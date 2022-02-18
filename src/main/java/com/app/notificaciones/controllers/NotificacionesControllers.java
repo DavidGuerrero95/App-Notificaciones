@@ -118,6 +118,13 @@ public class NotificacionesControllers {
 		mensaje.setEmail(email);
 		eService.enviarMensaje(mensaje);
 	}
+	
+	@PutMapping("/notificaciones/enviar/mensaje/prueba/")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Object  enviarMensajePrueba(@RequestParam("subject") String subject, @RequestParam("email") String email, @RequestParam("body") String body) {
+		eService.sendSimpleEmail(email,body,subject);
+		return eService.sendMail();
+	}
 
 	@CircuitBreaker(name = "notificaciones", fallbackMethod = "obtenerListaSuscripciones")
 	@PutMapping("/notificaciones/proyecto/edit/enabled/")

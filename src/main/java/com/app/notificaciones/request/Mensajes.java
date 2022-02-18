@@ -14,6 +14,17 @@ public class Mensajes {
 
 	@NotNull
 	private String mensaje;
+	
+	public Mensajes(String name, String email, String mensaje) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.mensaje = mensaje;
+	}
+	
+	public Mensajes() {
+		
+	}
 
 	public String getName() {
 		return name;

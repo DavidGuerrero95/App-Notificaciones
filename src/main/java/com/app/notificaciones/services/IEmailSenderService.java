@@ -8,4 +8,6 @@ public interface IEmailSenderService {
 
 	public void enviarMensaje(Mensajes mensaje);
 	
+	Object sendMail();
+	
 }
