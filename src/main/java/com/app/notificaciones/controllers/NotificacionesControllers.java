@@ -126,7 +126,7 @@ public class NotificacionesControllers {
 		return eService.sendMail();
 	}
 
-	@CircuitBreaker(name = "notificaciones", fallbackMethod = "obtenerListaSuscripciones")
+	//@CircuitBreaker(name = "notificaciones", fallbackMethod = "obtenerListaSuscripciones")
 	@PutMapping("/notificaciones/proyecto/edit/enabled/")
 	@ResponseStatus(code = HttpStatus.OK)
 	public void enviarMensajeEnabled(@RequestParam("nombre") String nombre, @RequestParam("enabled") Boolean enabled) {
