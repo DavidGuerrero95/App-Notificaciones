@@ -1,11 +1,17 @@
 com\app\notificaciones\services\IEmailSenderService.class
+com\app\notificaciones\models\ProyectosGamificacion.class
 com\app\notificaciones\models\Notificaciones.class
 com\app\notificaciones\models\Suscripciones.class
 com\app\notificaciones\repository\NotificacionesRepository.class
 com\app\notificaciones\services\EmailSenderService.class
+com\app\notificaciones\clients\ProyectosFeignClient.class
 com\app\notificaciones\AppNotificacionesApplication.class
+com\app\notificaciones\models\Proyectos.class
+com\app\notificaciones\repository\ComentariosRepository.class
 com\app\notificaciones\controllers\NotificacionesControllers.class
 com\app\notificaciones\repository\SuscripcionesRepository.class
 com\app\notificaciones\config\SwaggerConfiguration.class
+com\app\notificaciones\request\Comentarios.class
 com\app\notificaciones\request\Mensajes.class
+com\app\notificaciones\clients\GamificacionFeignClient.class
 com\app\notificaciones\clients\SuscripcionesFeignClient.class

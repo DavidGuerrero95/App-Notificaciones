@@ -19,15 +19,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.notificaciones.clients.GamificacionFeignClient;
+import com.app.notificaciones.clients.ProyectosFeignClient;
 import com.app.notificaciones.clients.SuscripcionesFeignClient;
 import com.app.notificaciones.models.Notificaciones;
+import com.app.notificaciones.models.Proyectos;
+import com.app.notificaciones.models.ProyectosGamificacion;
 import com.app.notificaciones.models.Suscripciones;
+import com.app.notificaciones.repository.ComentariosRepository;
 import com.app.notificaciones.repository.NotificacionesRepository;
 import com.app.notificaciones.repository.SuscripcionesRepository;
+import com.app.notificaciones.request.Comentarios;
 import com.app.notificaciones.request.Mensajes;
 import com.app.notificaciones.services.IEmailSenderService;
-
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 
 @RestController
 public class NotificacionesControllers {
@@ -46,6 +50,15 @@ public class NotificacionesControllers {
 	@Autowired
 	SuscripcionesFeignClient sClient;
 
+	@Autowired
+	ComentariosRepository cRepository;
+
+	@Autowired
+	ProyectosFeignClient pClient;
+
+	@Autowired
+	GamificacionFeignClient gClient;
+
 	@PostMapping("/notificaciones/crear/")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Boolean crearNotificaciones(@RequestParam("username") String username, @RequestParam("email") String email)
@@ -61,7 +74,7 @@ public class NotificacionesControllers {
 		} catch (Exception e) {
 			throw new IOException("Error la creacion, notificaciones: " + e.getMessage());
 		}
-		
+
 	}
 
 	@PutMapping("/notificaciones/usuario/editar/{username}")
@@ -79,7 +92,7 @@ public class NotificacionesControllers {
 		} catch (Exception e) {
 			throw new IOException("Error la edicion, notificaciones: " + e.getMessage());
 		}
-		
+
 	}
 
 	@DeleteMapping("/notificaciones/eliminar/")
@@ -92,7 +105,7 @@ public class NotificacionesControllers {
 		} catch (Exception e) {
 			throw new IOException("Error la eliminacion, notificaciones: " + e.getMessage());
 		}
-		
+
 	}
 
 	@GetMapping("/notificaciones/usuario/enviar/{username}")
@@ -118,15 +131,17 @@ public class NotificacionesControllers {
 		mensaje.setEmail(email);
 		eService.enviarMensaje(mensaje);
 	}
-	
+
 	@PutMapping("/notificaciones/enviar/mensaje/prueba/")
 	@ResponseStatus(code = HttpStatus.OK)
-	public Object  enviarMensajePrueba(@RequestParam("subject") String subject, @RequestParam("email") String email, @RequestParam("body") String body) {
-		eService.sendSimpleEmail(email,body,subject);
+	public Object enviarMensajePrueba(@RequestParam("subject") String subject, @RequestParam("email") String email,
+			@RequestParam("body") String body) {
+		eService.sendSimpleEmail(email, body, subject);
 		return eService.sendMail();
 	}
 
-	//@CircuitBreaker(name = "notificaciones", fallbackMethod = "obtenerListaSuscripciones")
+	// @CircuitBreaker(name = "notificaciones", fallbackMethod =
+	// "obtenerListaSuscripciones")
 	@PutMapping("/notificaciones/proyecto/edit/enabled/")
 	@ResponseStatus(code = HttpStatus.OK)
 	public void enviarMensajeEnabled(@RequestParam("nombre") String nombre, @RequestParam("enabled") Boolean enabled) {
@@ -233,7 +248,7 @@ public class NotificacionesControllers {
 		} catch (Exception e) {
 			throw new IOException("Error la creacion, notificaciones: " + e.getMessage());
 		}
-		
+
 	}
 
 	@PutMapping("/notificaciones/suscripciones/editar/")
@@ -245,7 +260,37 @@ public class NotificacionesControllers {
 		} catch (Exception e) {
 			throw new IOException("Error la edicion, notificaciones: " + e.getMessage());
 		}
-		
+	}
+
+	@PutMapping("/notificaciones/suscripciones/comentarios/editar/")
+	@ResponseStatus(code = HttpStatus.OK)
+	public Boolean editarSuscripcionesComentarios(@RequestBody Comentarios s) throws IOException {
+		try {
+			cRepository.save(s);
+			return true;
+		} catch (Exception e) {
+			throw new IOException("Error la edicion, notificaciones: " + e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/notificaciones/suscripciones/comentarios/eliminar/")
+	public Boolean eliminarComentarioId(@RequestParam String id) throws IOException {
+		try {
+			cRepository.deleteById(id);
+			return true;
+		} catch (Exception e) {
+			throw new IOException("Error eliminar un comentario, estadistica " + e.getMessage());
+		}
+	}
+
+	@DeleteMapping("/notificaciones/suscripciones/comentarios/eliminar/todos/")
+	public Boolean eliminarAllComentario(@RequestParam String nombre) throws IOException {
+		try {
+			cRepository.deleteAllByNombre(nombre);
+			return true;
+		} catch (Exception e) {
+			throw new IOException("Error eliminar todos comentarios, estadistica " + e.getMessage());
+		}
 	}
 
 	@PutMapping("/notificaciones/suscripciones/")
@@ -285,6 +330,44 @@ public class NotificacionesControllers {
 
 	}
 
+	@PutMapping("/notificaciones/gamificacion/proyecto/notificacion-ganadores/")
+	@ResponseStatus(code = HttpStatus.OK)
+	public void enviarNotificacionGanador(@RequestParam("nombre") String nombre)	{
+		List<String> notificacion = new ArrayList<>();
+		Mensajes correo = new Mensajes();
+
+		ProyectosGamificacion pG = gClient.verGamificacionProyectos(nombre);
+		List<String> lU = pG.getUsuariosGanadores();
+		String mensaje = pG.getMensajeGanador();
+
+		Calendar c = Calendar.getInstance();
+		String dia = Integer.toString(c.get(Calendar.DATE));
+		String mes = Integer.toString(c.get(Calendar.MONTH));
+		String annio = Integer.toString(c.get(Calendar.YEAR));
+		String fecha = dia + "/" + mes + "/" + annio;
+		Integer hora = c.get(Calendar.HOUR_OF_DAY);
+		Integer minutos = c.get(Calendar.MINUTE);
+		String tiempo = hora + ":" + minutos;
+
+		notificacion.add(nombre);
+		notificacion.add(mensaje);
+		notificacion.add(fecha);
+		notificacion.add(tiempo);
+		correo.setMensaje(mensaje);
+
+		lU.forEach(x -> {
+			Notificaciones noti = nRepository.findByUsername(x);
+			List<List<String>> totalNotificacions = noti.getMensajes();
+			totalNotificacions.add(notificacion);
+			noti.setMensajes(totalNotificacions);
+			noti.setActivar(true);
+			nRepository.save(noti);
+			correo.setName(x);
+			correo.setEmail(noti.getEmail());
+			eService.enviarMensaje(correo);
+		});
+	}
+
 	@PostMapping("/notificaciones/inscripciones/")
 	@ResponseStatus(code = HttpStatus.OK)
 	public void enviarMensajeInscripciones(@RequestParam String nombre, @RequestParam String username) {
@@ -302,10 +385,12 @@ public class NotificacionesControllers {
 		Integer minutos = c.get(Calendar.MINUTE);
 		String tiempo = hora + ":" + minutos;
 		Mensajes correo = new Mensajes();
-		String mensaje = "Gracias por participar en el proyecto: " + nombre
-				+ ", sus aportes serán muy valiosos para el diseño y seguimiento del proyecto."
-				+ " Puedes ver las estadística de participación en la City SuperApp."
-				+ "\nDeseas adquirir información de la evolución del proyecto, inscríbete!";
+		Proyectos p = pClient.verProyecto(nombre);
+		String mensaje = p.getMensajeParticipacion();
+
+		if (p.getGamificacion())
+			mensaje += "\n" + gClient.verGamificacionProyectos(nombre).getMensajeParticipacion();
+
 		notificacion.add(nombre);
 		notificacion.add(mensaje);
 		notificacion.add(fecha);
@@ -353,6 +438,17 @@ public class NotificacionesControllers {
 	public List<List<String>> verNotificaciones(@PathVariable String username) {
 		Notificaciones noti = nRepository.findByUsername(username);
 		return noti.getMensajes();
+	}
+
+	@DeleteMapping("/notificacioneso/eliminar/all/usuarios/")
+	@ResponseStatus(code = HttpStatus.ACCEPTED)
+	public Boolean eliminarAllUsuario() throws IOException {
+		try {
+			nRepository.deleteAll();
+			return true;
+		} catch (Exception e) {
+			throw new IOException("Error: " + e.getMessage());
+		}
 	}
 
 }

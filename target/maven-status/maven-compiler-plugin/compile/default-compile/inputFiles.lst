@@ -3,9 +3,15 @@ S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\j
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\request\Mensajes.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\config\SwaggerConfiguration.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\models\Notificaciones.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\models\ProyectosGamificacion.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\repository\NotificacionesRepository.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\models\Suscripciones.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\repository\ComentariosRepository.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\controllers\NotificacionesControllers.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\request\Comentarios.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\services\IEmailSenderService.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\clients\GamificacionFeignClient.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\clients\SuscripcionesFeignClient.java
 S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\AppNotificacionesApplication.java
-S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\controllers\NotificacionesControllers.java
-S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\services\IEmailSenderService.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\clients\ProyectosFeignClient.java
+S:\Users\Documentos\SmartCity\Aplicacion\workspace\App-Notificaciones\src\main\java\com\app\notificaciones\models\Proyectos.java
