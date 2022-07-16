@@ -1,6 +1,6 @@
 package com.app.notificaciones.services;
 
-import com.app.notificaciones.request.Mensajes;
+import com.app.notificaciones.responses.Mensajes;
 
 public interface IEmailSenderService {
 

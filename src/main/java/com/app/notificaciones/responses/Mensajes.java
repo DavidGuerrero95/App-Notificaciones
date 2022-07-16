@@ -1,4 +1,4 @@
-package com.app.notificaciones.request;
+package com.app.notificaciones.responses;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;

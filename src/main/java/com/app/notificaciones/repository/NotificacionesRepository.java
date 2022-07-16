@@ -11,4 +11,10 @@ public interface NotificacionesRepository extends MongoRepository<Notificaciones
 	@RestResource(path = "buscar-name")
 	public Notificaciones findByUsername(@Param("username") String username);
 
+	@RestResource(path = "exists-name")
+	public Boolean existsByUsername(@Param("username") String username);
+
+	@RestResource(path = "delete-name")
+	public void deleteByUsername(@Param("username") String nombre);
+
 }
